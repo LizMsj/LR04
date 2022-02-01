@@ -25,7 +25,6 @@ def duble(d1, A):
     D1 = [i for i, x in enumerate(A) if A.count(x) > 1]
     index = []
     d1.clear()
-    help_in_way = []
     if len(D) >= len(D1):
         for x in D:
             if x in D1:
@@ -37,7 +36,6 @@ def duble(d1, A):
     for x in index:
         t = [A[x], size[x]]
         d1[pop[x]]= t
-        help_in_way.append(A[x])
     fin(d1)
 
 def fin(d1):
@@ -58,7 +56,6 @@ def fin(d1):
             print()
   
 if __name__ == '__main__':
-    d1 = dict() # словарь - ключ (путь до файла): значение(размер файла)
+    d1 = dict()
     pt()
     duble(d1, A)
-    
