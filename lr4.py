@@ -1,61 +1,47 @@
-from os import *
+import os
 
 def pt():
     x = input('Введите путь к папке: ')
-    if path.isdir(x) == True:
-        print("Проведён анализ в папке ", x)
+    if os.path.isdir(x) == True:
+        print('Проведён анализ в папке ', x, '\n')
         dictionary(x)
     else: pt()
   
 def dictionary(x):
-    for i in listdir(x):
-        if path.isdir(x + "\\" + i):
-            dictionary(x+ '\\' + i)
-        elif path.isfile(x + '\\' + i):
-            name = x + "\\" + i
-            size = stat(x + "\\" + i).st_size
-            d1[name] = size
-            A.append(i)
-    return d1, A
+    for filename in os.listdir(x):
+        current_puth = os.path.join(x, filename)
+        if os.path.isdir(current_puth):
+            d1.update(dictionary(current_puth))
+        else:
+            d1[current_puth] = os.path.getsize(current_puth)
+    return d1
+    
 
-def duble(d1, A):
-    size = list(d1.values())
-    pop = list(d1.keys())
-    D = [i for i, x in enumerate(size) if size.count(x) > 1]
-    D1 = [i for i, x in enumerate(A) if A.count(x) > 1]
-    index = []
+def duble(d1: dict):
+    big_dict = {}
+    for way, size in d1.items():
+        name = str(os.path.basename(way) + '_' + str(size))
+        if (name) in big_dict.keys():
+            big_dict.get(name).append(way)
+        else:
+            big_dict[name]=[way]
     d1.clear()
-    if len(D) >= len(D1):
-        for x in D:
-            if x in D1:
-                index.append(x)
-    else:
-        for x in D1:
-            if x in D:
-                index.append(x)
-    for x in index:
-        t = [A[x], size[x]]
-        d1[pop[x]]= t
+    for name, filesize in big_dict.items():
+        if len(filesize) > 1:
+            d1[name] = filesize
     fin(d1)
 
 def fin(d1):
-    print()
     if len(d1)==0:
-        print("Дубликатов нет")
+        print('Дубликатов нет')
     else:
-        help_in_way = list()
-        for x in d1.values():
-            if x not in help_in_way:
-                help_in_way.append(x)
-        help_in_way.sort()
-        for y in help_in_way:
-            print("Дубликаты ", y)
-            p = [k for k in d1 if d1[k] == y]
-            for i in p:
-                print(str(i).replace("\\\\", "\\"))
+        for filename, ways in d1.items():
+            print('Дубликат типа "' + filename + '":')
+            for way in ways:
+                print(way)
             print()
   
 if __name__ == '__main__':
-    d1 = dict()
+    d1 = {}
     pt()
-    duble(d1, A)
+    duble(d1)
