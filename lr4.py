@@ -4,10 +4,11 @@ def pt():
     x = input('Введите путь к папке: ')
     if os.path.isdir(x) == True:
         print('Проведён анализ в папке ', x, '\n')
-        dictionary(x)
-    else: pt()
+        return x
+    else: pt(d1)
   
 def dictionary(x):
+    d1 = {}
     for filename in os.listdir(x):
         current_puth = os.path.join(x, filename)
         if os.path.isdir(current_puth):
@@ -16,11 +17,10 @@ def dictionary(x):
             d1[current_puth] = os.path.getsize(current_puth)
     return d1
     
-
-def duble(d1: dict):
+def duble(d1):
     big_dict = {}
     for way, size in d1.items():
-        name = str(os.path.basename(way) + '_' + str(size))
+        name = str(os.path.basename(way)) + '_' + str(size)
         if (name) in big_dict.keys():
             big_dict.get(name).append(way)
         else:
@@ -29,19 +29,18 @@ def duble(d1: dict):
     for name, filesize in big_dict.items():
         if len(filesize) > 1:
             d1[name] = filesize
-    fin(d1)
+    return d1
 
 def fin(d1):
     if len(d1)==0:
         print('Дубликатов нет')
     else:
         for filename, ways in d1.items():
-            print('Дубликат типа "' + filename + '":')
-            for way in ways:
-                print(way)
+            size = os.path.getsize(ways[0])
+            print(size)
+            for x in ways:
+                print(x)
             print()
   
 if __name__ == '__main__':
-    d1 = {}
-    pt()
-    duble(d1)
+    fin(duble(dictionary(pt())))
